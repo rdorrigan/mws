@@ -21,6 +21,7 @@ type Throttle struct {
 	Quota     int /*per hour*/
 	Attempt   int
 	SleepMap  map[int]int64
+	Start     time.Time
 	Synced    *sync.Mutex
 	Timer     *time.Timer
 	Ticker    *time.Ticker
@@ -50,7 +51,7 @@ func NewRequest() *Request {
 
 // NewThrottler creates a new Throttler
 func NewThrottler() *Throttle {
-	return &Throttle{"", time.Second, false, 0, 0, 0, nil, &sync.Mutex{}, time.NewTimer(1 * time.Nanosecond), time.NewTicker(1 * time.Nanosecond)}
+	return &Throttle{"", time.Second, false, 0, 0, 0, nil, time.Now(), &sync.Mutex{}, time.NewTimer(1 * time.Nanosecond), time.NewTicker(1 * time.Nanosecond)}
 }
 
 // MWS DOES NOT LIKE CONCURRENCY AND ERRORS SignatureDoesNotMatch
@@ -154,6 +155,32 @@ func (t *Throttle) NewTicker() {
 			return
 		case t := <-t.Ticker.C:
 			fmt.Println("sleeper is ticking", t)
+		}
+	}
+	// <-t.Ticker.C
+
+}
+
+// NewSlowTicker initializes a time.NewTicker
+func (t *Throttle) NewSlowTicker() {
+	t.Ticker = time.NewTicker(time.Minute)
+	defer t.Ticker.Stop()
+	done := make(chan bool, 1)
+	go func() {
+		wait := t.Start.Add(time.Hour)
+		time.Sleep(wait.Sub(time.Now()))
+		done <- true
+		// for nt := range t.Ticker.C {
+		// 	fmt.Printf("ticking for %v at %v\n", time.Second, nt)
+		// }
+	}()
+	for {
+		select {
+		case <-done:
+			fmt.Println("slow sleeper finished ticking")
+			return
+		case t := <-t.Ticker.C:
+			fmt.Println("slow sleeper is ticking", t)
 		}
 	}
 	// <-t.Ticker.C
