@@ -92,7 +92,7 @@ type XMLResponse struct {
 
 // XMLResult is the xml container for GetMyPriceForSKU() Responses
 type XMLResult struct {
-	XMLName       xml.Name `xml:"GetLowestOfferListingsForSKUResult"`
+	XMLName       xml.Name `xml:"GetLowestPricedOffersForSKUResult"`
 	MarketplaceID string   `xml:"MarketplaceID,attr"`
 	SKU           string   `xml:"SKU,attr"`
 	ItemCondition string   `xml:"ItemCondition,attr"`
@@ -107,7 +107,7 @@ type Product struct {
 	XMLName     xml.Name   `xml:"Product"`
 	Identifiers Identifier `xml:"Identifier"`
 	Offers      []Offer    `xml:"Offers"`
-	Summary     []Summary  `xml:"Summary"`
+	Summary     Summary    `xml:"Summary"`
 }
 
 // Identifier describes ASIN & SellerSKU.
@@ -134,7 +134,7 @@ type Offer struct {
 	IsFeaturedMerchant   string               `xml:"IsFeaturedMerchant"`
 }
 
-// Summary is returned when status="ActiveButTooSoonForProcessing"
+// Summary contains price information about the product
 type Summary struct {
 	XMLName                         xml.Name                        `xml:"Summary"`
 	TotalOfferCount                 int                             `xml:"TotalOfferCount"`
