@@ -64,11 +64,7 @@ func GenerateAmazonURL(api MWSAPI, Action string, ActionPath string, Parameters 
 	values := url.Values{}
 	values.Add("Action", Action)
 
-<<<<<<< HEAD
 	if api.AuthToken != "" {
-=======
-	if (api.AuthToken != "") {
->>>>>>> d892d31d00468898e6a62a8acf808da54abbe5ec
 		values.Add("MWSAuthToken", api.AuthToken)
 	}
 
