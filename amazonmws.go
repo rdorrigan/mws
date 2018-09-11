@@ -93,8 +93,11 @@ func (api MWSAPI) GetLowestOfferListingsForSKU(items []string) (string, error) {
 // GetLowestPricedOffersForSKU takes a single SKU and returns the result.
 func (api MWSAPI) GetLowestPricedOffersForSKU(item string) (string, error) {
 	params := make(map[string]string)
-	key := fmt.Sprintf("SellerSKU")
-	params[key] = item
+	// ItemCondition is a required field
+	// ItemCondition values: New, Used, Collectible, Refurbished, Club.
+	params["ItemCondition"] = "New"
+	sku := fmt.Sprintf("SellerSKU")
+	params[sku] = item
 	params["MarketplaceId"] = string(api.MarketplaceID)
 
 	return api.genSignAndFetch("GetLowestPricedOffersForSKU", prodAPI, params)
