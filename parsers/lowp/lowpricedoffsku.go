@@ -113,7 +113,7 @@ type Product struct {
 // Identifier describes ASIN & SellerSKU.
 type Identifier struct {
 	XMLName           xml.Name `xml:"Identifier"`
-	MarketplaceID     string   `xml:"MarketplaceIDr"`
+	MarketplaceID     string   `xml:"MarketplaceID"`
 	SellerSKU         string   `xml:"SellerSKU"`
 	ItemCondition     string   `xml:"ItemCondition"`
 	TimeOfOfferChange string   `xml:"TimeOfOfferChange"`
