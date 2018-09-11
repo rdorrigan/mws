@@ -19,13 +19,8 @@ type MWSAPI struct {
 	SecretKey     string
 	Host          string
 	AuthToken     string
-<<<<<<< HEAD
 	MarketplaceID string
 	SellerID      string
-=======
-	MarketplaceId string
-	SellerId      string
->>>>>>> d892d31d00468898e6a62a8acf808da54abbe5ec
 }
 
 func (api MWSAPI) genSignAndFetch(Action string, ActionPath string, Parameters map[string]string) (string, error) {
