@@ -102,3 +102,13 @@ func (api MWSAPI) GetLowestPricedOffersForSKU(item string) (string, error) {
 
 	return api.genSignAndFetch("GetLowestPricedOffersForSKU", prodAPI, params)
 }
+
+// GetProductCategoriesForSKU takes a single SKU and returns the result.
+func (api MWSAPI) GetProductCategoriesForSKU(item string) (string, error) {
+	params := make(map[string]string)
+	sku := fmt.Sprintf("SellerSKU")
+	params[sku] = item
+	params["MarketplaceId"] = string(api.MarketplaceID)
+
+	return api.genSignAndFetch("GetLowestPricedOffersForSKU", prodAPI, params)
+}
