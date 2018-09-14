@@ -29,22 +29,8 @@ func (p *XMLParser) Parser(body []byte) *XMLResponse {
 	if err := xml.Unmarshal(body, &i); err != nil {
 		log.Println(err)
 	}
-	// i.tooSoon()
-	// for _, r := range i.Results {
-	// 	if r.TooSoon {
-	// 		i.parseTime()
-	// 	}
-	// }
 	return &i
 }
-
-// func (r *XMLResponse) tooSoon() {
-// 	for _, p := range r.Results {
-// 		if p.Status == "ActiveButTooSoonForProcessing" {
-// 			p.TooSoon = true
-// 		}
-// 	}
-// }
 
 // XMLResponse contains the XML results of the func GetLowestOfferListingsForSKU
 type XMLResponse struct {
@@ -56,10 +42,7 @@ type XMLResponse struct {
 // XMLResult is the xml container for GetProductCategoriesForSKU() Responses
 type XMLResult struct {
 	XMLName xml.Name `xml:"GetProductCategoriesForSKUResult"`
-	// ASIN    string   `xml:"SellerSKU,attr"`
-	// SellerSKU string `xml:"SellerSKU,attr"`
-	// Status    string `xml:"status,attr"`
-	Self    []Self `xml:"Self"`
+	Self    []Self   `xml:"Self"`
 	TooSoon bool
 }
 
