@@ -92,12 +92,15 @@ func (t *Throttle) Limiter(in []string, out chan []string) {
 					// 	return
 					// }
 				}
+				close(out)
 			}()
 		} else {
 			// t.NewTicker()
 			fmt.Printf("sending %v strings\n", x)
 			out <- in
+			close(out)
 		}
+
 	}
 }
 
@@ -128,9 +131,9 @@ func (t *Throttle) Sleeper() {
 }
 
 // NewTimer initializes a time.NewTimer
-func (t *Throttle) NewTimer() {
+func (t *Throttle) NewTimer(d time.Duration) {
 	if t.Timer.Stop() {
-		t.Timer.Reset(t.Duration)
+		t.Timer.Reset(d)
 	}
 	<-t.Timer.C
 }
@@ -168,7 +171,8 @@ func (t *Throttle) NewSlowTicker() {
 	done := make(chan bool, 1)
 	go func() {
 		wait := t.Start.Add(time.Hour)
-		time.Sleep(wait.Sub(time.Now()))
+		// time.Sleep(wait.Sub(time.Now()))
+		t.NewTimer(wait.Sub(time.Now()))
 		done <- true
 		// for nt := range t.Ticker.C {
 		// 	fmt.Printf("ticking for %v at %v\n", time.Second, nt)
