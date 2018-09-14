@@ -110,5 +110,5 @@ func (api MWSAPI) GetProductCategoriesForSKU(item string) (string, error) {
 	params[sku] = item
 	params["MarketplaceId"] = string(api.MarketplaceID)
 
-	return api.genSignAndFetch("GetLowestPricedOffersForSKU", prodAPI, params)
+	return api.genSignAndFetch("GetProductCategoriesForSKU", prodAPI, params)
 }
