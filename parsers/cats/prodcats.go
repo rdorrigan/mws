@@ -56,21 +56,22 @@ type ResponseMetadata struct {
 // Also contains a ProductCategoryId for each of the parent categories of the product,
 //  up to the root for the Marketplace.
 type Self struct {
-	XMLName             xml.Name  `xml:"Self"`
-	ProductCategoryID   string    `xml:"ProductCategoryId"`
-	ProductCategoryName string    `xml:"ProductCategoryName"`
-	Parents             []Parents `xml:"Parent"`
+	XMLName             xml.Name `xml:"Self"`
+	ProductCategoryID   string   `xml:"ProductCategoryId"`
+	ProductCategoryName string   `xml:"ProductCategoryName"`
+	Parents             []Parent `xml:"Parent"`
 }
 
 // Parents contains the potentially many layers of "Parent" categories
 // See Example responses for clarification
-type Parents struct {
-	Parents []Parent
-}
+// type Parents struct {
+// 	Parents []Parent `xml:"Parent"`
+// }
 
 // Parent describes a category of the product
 type Parent struct {
 	XMLName             xml.Name `xml:"Parent"`
 	ProductCategoryID   string   `xml:"ProductCategoryId"`
 	ProductCategoryName string   `xml:"ProductCategoryName"`
+	Parents             []Parent `xml:"Parent"`
 }
