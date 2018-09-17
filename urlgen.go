@@ -5,9 +5,11 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -48,6 +50,43 @@ func (api MWSAPI) genSignAndFetch(Action string, ActionPath string, Parameters m
 	}
 
 	return string(body), nil
+}
+func (api MWSAPI) genSignAndGet(Action string, ActionPath string, Parameters map[string]string, dst string) error {
+	genURL, err := GenerateAmazonURL(api, Action, ActionPath, Parameters)
+	if err != nil {
+		return err
+	}
+
+	SetTimestamp(genURL)
+
+	signedurl, err := SignAmazonURL(genURL, api)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Get(signedurl)
+	if err != nil {
+		return err
+	}
+
+	out, err := os.OpenFile(dst, os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		resp.Body.Close()
+		out.Close()
+	}()
+	// defer resp.Body.Close()
+	// body, err := ioutil.ReadAll(resp.Body)
+	if _, err := io.Copy(out, resp.Body); err != nil {
+		return err
+	}
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	return nil
 }
 
 // GenerateAmazonURL prepares the url in genSignAndFetch
