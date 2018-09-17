@@ -132,3 +132,10 @@ func (api MWSAPI) RequestReport(report string, dateparams []string) (string, err
 
 	return api.genSignAndFetch("RequestReport", reportAPI, params)
 }
+
+// GetReportRequestList Returns a list of report requests that you can use to get the ReportRequestId for a report.
+func (api MWSAPI) GetReportRequestList(params map[string]string) (string, error) {
+	// params := make(map[string]string)
+	params["MarketplaceId"] = string(api.MarketplaceID)
+	return api.genSignAndFetch("GetReportRequestList", reportAPI, params)
+}
