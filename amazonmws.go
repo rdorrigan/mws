@@ -3,11 +3,13 @@ package amazonmws
 
 import (
 	"fmt"
+	"strings"
 )
 
 const (
 	bulklimit = 18
 	prodAPI   = "/Products/2011-10-01"
+	reportAPI = "/Reports/2009-01-01"
 )
 
 /*
@@ -111,4 +113,16 @@ func (api MWSAPI) GetProductCategoriesForSKU(item string) (string, error) {
 	params["MarketplaceId"] = string(api.MarketplaceID)
 
 	return api.genSignAndFetch("GetProductCategoriesForSKU", prodAPI, params)
+}
+
+// RequestReport allows for requesting a Report from reportAPI
+func (api MWSAPI) RequestReport(report string) (string, error) {
+	params := make(map[string]string)
+
+	// Ensure the report enumeration is in all caps
+	report = strings.ToUpper(report)
+	params["ReportType"] = report
+	params["MarketplaceId"] = string(api.MarketplaceID)
+
+	return api.genSignAndFetch("RequestReport", reportAPI, params)
 }
