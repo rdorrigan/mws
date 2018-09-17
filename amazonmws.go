@@ -116,12 +116,18 @@ func (api MWSAPI) GetProductCategoriesForSKU(item string) (string, error) {
 }
 
 // RequestReport allows for requesting a Report from reportAPI
-func (api MWSAPI) RequestReport(report string) (string, error) {
+func (api MWSAPI) RequestReport(report string, dateparams []string) (string, error) {
 	params := make(map[string]string)
-
-	// Ensure the report enumeration is in all caps
+	l := len(dateparams)
+	if l > 2 {
+		return "", fmt.Errorf("Too many arguments. dateparams cannot exceed 2, a start and an end date")
+	}
 	report = strings.ToUpper(report)
 	params["ReportType"] = report
+	// Expected format time.Now().Format("2006-01-02T15:04:05-07")
+	params["EndDate"] = dateparams[1]
+	params["StartDate"] = dateparams[0]
+
 	params["MarketplaceId"] = string(api.MarketplaceID)
 
 	return api.genSignAndFetch("RequestReport", reportAPI, params)
