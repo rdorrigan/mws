@@ -76,6 +76,23 @@ const (
 	QuotaExceeded = "QuotaExceeded"
 	// ReqThrottled will be throttled
 	ReqThrottled = "RequestThrottled"
+
+	// All below HTTP status code = 400
+
+	// AccessToReportDenied =  Insufficient privileges to access the requested report.
+	AccessToReportDenied = "AccessToReportDenied"
+	// InvalidReportID = Provided Report Id was invalid.
+	InvalidReportID = "InvalidReportId"
+	// InvalidReportType = Submitted Report Type was invalid.
+	InvalidReportType = "InvalidReportType"
+	// InvalidRequest = Request has missing or invalid parameters and cannot be parsed.
+	InvalidRequest = "InvalidRequest"
+	// InvalidScheduleFrequency =  Submitted schedule frequency was invalid.
+	InvalidScheduleFrequency = "InvalidScheduleFrequency"
+	// ReportNoLongerAvailable = The specified report is no longer available for download.
+	ReportNoLongerAvailable = "ReportNoLongerAvailable"
+	// ReportNotReady = Report not yet generated.
+	ReportNotReady = "ReportNotReady"
 )
 
 // NewError implements ErrorResponse.Error
@@ -116,6 +133,7 @@ func (er *ErrorResponse) CheckCode(i int) {
 		InternalError,
 		QuotaExceeded,
 		ReqThrottled,
+		ReportNotReady,
 	}
 	exitcodes := []string{
 		Disconnect,
@@ -124,6 +142,12 @@ func (er *ErrorResponse) CheckCode(i int) {
 		InvalidAccessKey,
 		SignDoesNotMatch,
 		InvalidAddress,
+		AccessToReportDenied,
+		InvalidReportID,
+		InvalidReportType,
+		InvalidRequest,
+		InvalidScheduleFrequency,
+		ReportNoLongerAvailable,
 	}
 	for _, s := range validcodes {
 		if strings.Compare(s, er.Response.Error[i].Code) == 0 {
@@ -133,7 +157,7 @@ func (er *ErrorResponse) CheckCode(i int) {
 	}
 	for _, e := range exitcodes {
 		if strings.Compare(e, er.Response.Error[i].Code) == 0 {
-			er.Throttle.Throttled = false
+			er.Throttle.Denied = true
 			return
 		}
 	}

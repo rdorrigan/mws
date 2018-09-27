@@ -17,6 +17,7 @@ type Throttle struct {
 	Operation string
 	Duration  time.Duration
 	Throttled bool
+	Denied    bool
 	Rate      int /*per second*/
 	Quota     int /*per hour*/
 	Attempt   int
@@ -51,11 +52,8 @@ func NewRequest() *Request {
 
 // NewThrottler creates a new Throttler
 func NewThrottler() *Throttle {
-	return &Throttle{"", time.Second, false, 0, 0, 0, nil, time.Now(), &sync.Mutex{}, time.NewTimer(1 * time.Nanosecond), time.NewTicker(1 * time.Nanosecond)}
+	return &Throttle{"", time.Second, false, false, 0, 0, 0, nil, time.Now(), &sync.Mutex{}, time.NewTimer(1 * time.Nanosecond), time.NewTicker(1 * time.Nanosecond)}
 }
-
-// MWS DOES NOT LIKE CONCURRENCY AND ERRORS SignatureDoesNotMatch
-// DESPITE FUNCTIONS WORKING WHEN CALLED WITHOUT CHANNELS
 
 // Limiter aids in preventing excess throttling
 func (t *Throttle) Limiter(in []string, out chan []string) {
@@ -111,7 +109,7 @@ func (t *Throttle) Sleepy() {
 	m[1] = int64(5)
 	m[2] = int64(10)
 	m[3] = int64(30)
-	m[4] = int64(60)
+	// m[4] = int64(60)
 	t.SleepMap = m
 }
 
@@ -193,7 +191,7 @@ func (t *Throttle) NewSlowTicker() {
 
 // Throttler sleeps
 func (t *Throttle) Throttler() {
-	if t.Attempt == 4 {
+	if t.Attempt == 3 {
 		fmt.Println("sleeping for :", t.Duration)
 		time.Sleep(t.Duration)
 		t.Attempt = 0

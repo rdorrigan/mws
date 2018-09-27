@@ -134,6 +134,7 @@ func (api MWSAPI) RequestReport(report string, dateparams []string) (string, err
 }
 
 // GetReportRequestList Returns a list of report requests that you can use to get the ReportRequestId for a report.
+// ReportRequestIdList A structured list of ReportRequestId values. If you pass in ReportRequestId values, other query conditions are ignored.
 func (api MWSAPI) GetReportRequestList(params map[string]string) (string, error) {
 	// params := make(map[string]string)
 	params["MarketplaceId"] = string(api.MarketplaceID)
