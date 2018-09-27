@@ -44,7 +44,7 @@ type XMLResult struct {
 	XMLName   xml.Name `xml:"GetReportRequestListResult"`
 	NextToken string   `xml:"NextToken"`
 	HasNext   bool     `xml:"HasNext"`
-	Info      Info     `xml:"ReportRequestInfo"`
+	Info      []Info   `xml:"ReportRequestInfo"`
 }
 
 // Info describes a ReportRequestInfos Identifiers & Offer
@@ -57,7 +57,7 @@ type Info struct {
 	Scheduled              bool     `xml:"Scheduled"`
 	SubmittedDate          string   `xml:"SubmittedDate"`
 	ReportProcessingStatus string   `xml:"ReportProcessingStatus"`
-	GeneratedReportId      string   `xml:"GeneratedReportId"`
+	GeneratedReportID      string   `xml:"GeneratedReportId"`
 	StartedProcessingDate  string   `xml:"StartedProcessingDate"`
 	CompletedDate          string   `xml:"CompletedDate"`
 }
